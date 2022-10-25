@@ -63,7 +63,7 @@ app.post("/api/notes", (req, res) => {
   readAndAppend(req.body, "./db/db.json");
 });
 
-app.delete(`/api/notes/:id`, (req, res) => {
+app.delete(`/api/notes/:id`, async (req, res) => {
   try {
     id = req.params.id;
     console.log("deleting database id:", id);
@@ -72,12 +72,26 @@ app.delete(`/api/notes/:id`, (req, res) => {
       "./db/db.json",
       "UTF-8",
       (err, note) => {
-        database = JSON.parse(note);
-        console.log("reading file");
+        if (err) return err;
+        return note;
       }
     );
-    console.log(newDataBase.id, newDataBase);
-    // delete database.id;
+
+    dataBase = JSON.parse(newDataBase);
+    console.log(dataBase);
+
+    let index = 0;
+    for (i of dataBase) {
+      const d = JSON.stringify(i);
+      newId = JSON.stringify(id);
+      newIndex = JSON.stringify(d);
+      if (newIndex === newId) {
+        console.log(i, index, "<---- THIS IS THE SELECTED DATA!");
+        dataBase.splice(index, 1);
+        console.log(dataBase);
+      }
+      index++;
+    }
   } catch (err) {
     console.log(err);
     return;
