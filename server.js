@@ -51,6 +51,7 @@ app.get("/api/notes", (req, res) => {
   //   console.info(`${req.method} request received for feedback`);
 
   fs.readFile("./db/db.json", (err, note) => {
+    if (err) console.log("error reading file.");
     res.json(JSON.parse(note));
   });
   //   readFromFile("./db/db.json").then((data) => res.json(JSON.parse(data)));
@@ -63,8 +64,24 @@ app.post("/api/notes", (req, res) => {
 });
 
 app.delete(`/api/notes/:id`, (req, res) => {
-  id = req.params.id;
-  console.log(id);
+  try {
+    id = req.params.id;
+    console.log("deleting database id:", id);
+
+    const newDataBase = fs.readFileSync(
+      "./db/db.json",
+      "UTF-8",
+      (err, note) => {
+        database = JSON.parse(note);
+        console.log("reading file");
+      }
+    );
+    console.log(newDataBase.id, newDataBase);
+    // delete database.id;
+  } catch (err) {
+    console.log(err);
+    return;
+  }
 });
 // POST Route for submitting feedback
 // app.post("/api/notes", (req, res) => {
