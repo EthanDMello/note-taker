@@ -56,8 +56,8 @@ const renderActiveNote = () => {
   if (activeNote.id) {
     noteTitle.setAttribute("readonly", true);
     noteText.setAttribute("readonly", true);
-    noteTitle.value = activeNote.title;
-    noteText.value = activeNote.text;
+    noteTitle.value = activeNote.id.title;
+    noteText.value = activeNote.id.text;
   } else {
     noteTitle.removeAttribute("readonly");
     noteText.removeAttribute("readonly");
@@ -83,9 +83,11 @@ const handleNoteDelete = (e) => {
   e.stopPropagation();
 
   const note = e.target;
-  const noteId = JSON.parse(note.parentElement.getAttribute("data-note")).id;
+  const noteId = JSON.parse(note.parentElement.getAttribute("data-note"));
+  console.log(noteId, activeNote.id);
 
   if (activeNote.id === noteId) {
+    console.log("deleting note");
     activeNote = {};
   }
 
@@ -97,8 +99,10 @@ const handleNoteDelete = (e) => {
 
 // Sets the activeNote and displays it
 const handleNoteView = (e) => {
+  console.log("note click");
   e.preventDefault();
-  activeNote = JSON.parse(e.target.parentElement.getAttribute("data-note"));
+  activeNote.id = JSON.parse(e.target.parentElement.getAttribute("data-note"));
+  console.log(activeNote.id);
   renderActiveNote();
 };
 
