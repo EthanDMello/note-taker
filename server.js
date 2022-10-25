@@ -62,9 +62,10 @@ app.post("/api/notes", (req, res) => {
   readAndAppend(req.body, "./db/db.json");
 });
 
-app.delete("/notes", (req, res) =>
-  res.sendFile(path.join(__dirname, "/public/notes.html"))
-);
+app.delete(`/api/notes/:id`, (req, res) => {
+  id = req.params.id;
+  console.log(id);
+});
 // POST Route for submitting feedback
 // app.post("/api/notes", (req, res) => {
 //   // Log that a POST request was received
