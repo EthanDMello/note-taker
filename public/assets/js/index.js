@@ -43,12 +43,12 @@ const saveNote = (note) =>
   });
 
 const deleteNote = (id) =>
-  fetch(`/api/notes/${JSON.stringify(id)}`, {
+  fetch(`/api/notes/${id}`, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(id),
+    body: id,
   });
 
 const renderActiveNote = () => {
@@ -88,14 +88,16 @@ const handleNoteDelete = (e) => {
   console.log("thiss is me clicking the delete", noteId);
 
   if (activeNote.id === noteId) {
-    console.log("deleting note");
     activeNote = {};
   }
 
-  deleteNote(noteId).then(() => {
+  try {
+    deleteNote(noteId);
     console.log("we deleted the thing");
     getAndRenderNotes();
-  });
+  } catch (err) {
+    console.log(err, "error in index");
+  }
 };
 
 // Sets the activeNote and displays it

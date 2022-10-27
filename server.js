@@ -54,18 +54,18 @@ app.get("/api/notes", (req, res) => {
     if (err) console.log("error reading file.");
     res.json(JSON.parse(note));
   });
-  //   readFromFile("./db/db.json").then((data) => res.json(JSON.parse(data)));
 });
 
 app.post("/api/notes", (req, res) => {
-  console.log(req.body);
+  console.log("calling notes post", req.body);
 
   readAndAppend(req.body, "./db/db.json");
+  res.json(JSON.stringify(req.body));
 });
 
 app.delete(`/api/notes/:id`, async (req, res) => {
   try {
-    id = req.params.id;
+    id = req.body;
     console.log("deleting database id:", id);
 
     const newDataBase = fs.readFileSync(
@@ -78,22 +78,23 @@ app.delete(`/api/notes/:id`, async (req, res) => {
     );
 
     dataBase = JSON.parse(newDataBase);
-    console.log(dataBase);
 
     let index = 0;
     for (i of dataBase) {
       const d = JSON.stringify(i);
       newId = JSON.stringify(id);
-      newIndex = JSON.stringify(d);
-      if (newIndex === newId) {
+      if (d === newId) {
         console.log(i, index, "<---- THIS IS THE SELECTED DATA!");
         dataBase.splice(index, 1);
         console.log(dataBase);
+        writeToFile("./db/db.json", dataBase);
       }
       index++;
     }
+    console.log(JSON.stringify(dataBase));
+    res.json(dataBase);
   } catch (err) {
-    console.log(err);
+    console.log(err, "DELETE ERROR");
     return;
   }
 });
