@@ -1,22 +1,10 @@
 [
-    {
-        "title": "My first Note",
-        "text": "I'm tired."
-    },
-    {
-        "title": "Easy",
-        "text": "Peasy"
-    },
-    {
-        "title": "huh",
-        "text": "ee"
-    },
-    {
-        "title": "IT",
-        "text": "WORKS"
-    },
-    {
-        "title": "YES",
-        "text": "IT WROKS"
-    }
+  {
+    "title": "My first Note",
+    "text": "I'm tired."
+  },
+  {
+    "title": "My second note",
+    "text": "Please give me 100% for finishing this homework :)"
+  }
 ]
