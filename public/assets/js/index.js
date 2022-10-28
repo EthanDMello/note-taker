@@ -85,7 +85,6 @@ const handleNoteDelete = (e) => {
 
   const note = e.target;
   const noteId = note.parentElement.getAttribute("data-note");
-  console.log("thiss is me clicking the delete", noteId);
 
   if (activeNote.id === noteId) {
     activeNote = {};
@@ -93,19 +92,16 @@ const handleNoteDelete = (e) => {
 
   try {
     deleteNote(noteId);
-    console.log("we deleted the thing");
     getAndRenderNotes();
   } catch (err) {
-    console.log(err, "error in index");
+    console.log(err, "error in index.js deleting note");
   }
 };
 
 // Sets the activeNote and displays it
 const handleNoteView = (e) => {
-  console.log("note click");
   e.preventDefault();
   activeNote.id = JSON.parse(e.target.parentElement.getAttribute("data-note"));
-  console.log(activeNote.id);
   renderActiveNote();
 };
 

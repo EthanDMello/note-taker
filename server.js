@@ -1,10 +1,6 @@
 const express = require("express");
 const path = require("path");
 const fs = require("fs");
-// const util = require("util");
-
-// Helper method for generating unique ids
-// const uuid = require("./helpers/uuid");
 
 const PORT = process.env.PORT || 3001;
 
@@ -16,6 +12,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static("public"));
 
+// adding content to end of file
 const readAndAppend = (content, file) => {
   fs.readFile(file, "utf8", (err, data) => {
     if (err) {
@@ -28,34 +25,31 @@ const readAndAppend = (content, file) => {
   });
 };
 
+// Rewriting whole file - for deleting notes
 const writeToFile = (destination, content) =>
   fs.writeFile(destination, JSON.stringify(content, null, 4), (err) =>
     err ? console.error(err) : console.info(`\nData written to ${destination}`)
   );
 
-// GET Route for homepage
+// GET Route for landing page
 app.get("/", (req, res) =>
   res.sendFile(path.join(__dirname, "/public/index.html"))
 );
 
-// GET Route for feedback page
+// GET Route for notes page
 app.get("/notes", (req, res) =>
   res.sendFile(path.join(__dirname, "/public/notes.html"))
 );
 
-// Promise version of fs.readFile
-// const readFromFile = util.promisify(fs.readFile);
-
-// GET Route for retrieving all the feedback
+// GET Route for retrieving all the notes
 app.get("/api/notes", (req, res) => {
-  //   console.info(`${req.method} request received for feedback`);
-
   fs.readFile("./db/db.json", (err, note) => {
     if (err) console.log("error reading file.");
     res.json(JSON.parse(note));
   });
 });
 
+// POST Route for adding/saving new note
 app.post("/api/notes", (req, res) => {
   console.log("calling notes post", req.body);
 
@@ -63,6 +57,7 @@ app.post("/api/notes", (req, res) => {
   res.json(JSON.stringify(req.body));
 });
 
+// DELETE Route for deleting single note
 app.delete(`/api/notes/:id`, async (req, res) => {
   try {
     id = req.body;
@@ -98,37 +93,8 @@ app.delete(`/api/notes/:id`, async (req, res) => {
     return;
   }
 });
-// POST Route for submitting feedback
-// app.post("/api/notes", (req, res) => {
-//   // Log that a POST request was received
-//   console.info(`${req.method} request received to submit feedback`);
 
-//   // Destructuring assignment for the items in req.body
-//   const { email, feedbackType, feedback } = req.body;
-
-//   // If all the required properties are present
-//   if (email && feedbackType && feedback) {
-//     // Variable for the object we will save
-//     const newFeedback = {
-//       email,
-//       feedbackType,
-//       feedback,
-//       feedback_id: uuid(),
-//     };
-
-//     readAndAppend(newFeedback, "./db/feedback.json");
-
-//     const response = {
-//       status: "success",
-//       body: newFeedback,
-//     };
-
-//     res.json(response);
-//   } else {
-//     res.json("Error in posting feedback");
-//   }
-// });
-
+// running express
 app.listen(PORT, () =>
   console.log(`App listening at http://localhost:${PORT} 🚀`)
 );
